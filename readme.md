@@ -59,33 +59,38 @@ The `Microspectrometer` class manages the UV-Vis spectrometer and provides vario
    import time
    # explicitly request pyseabreeze
    seabreeze.use('pyseabreeze')
+   ```
 2. Create an instance of the Microspectrometer class.
+   ```
    spectrometer = Microspectrometer()
+   ```
 3. Connect to the spectrometer.
+   ```
    spectrometer.connect()
+   ```
 4. Perform measurements using the measure method, and save or analyze the spectra as needed.
 
 ## Example Code
 ```python
-# Example Usage with New Experiment
+### Example Usage with New Experiment
 spectrometer = Microspectrometer()
 
-# Connect to the spectrometer
+### Connect to the spectrometer
 spectrometer.connect()
 
-# Start a new experiment with a custom directory name
+### Start a new experiment with a custom directory name
 experiment_directory = 'my_experiment'
 spectrometer.start_new_experiment(directory=experiment_directory)
 
-# Perform a measurement
+### Perform a measurement
 spectrometer.measure(spectrum_type='current_spectrum', number_of_scans=10, save=True)
 
-# Plot absorbance
+### Plot absorbance
 spectrometer.plot_absorbance(save=False)
 
-# Save transmission spectrum
+### Save transmission spectrum
 spectrometer.save_transmission(spectrum_type='current_spectrum')
 
-# Disconnect from the spectrometer
+### Disconnect from the spectrometer
 spectrometer.disconnect()
-
+```
