@@ -8,7 +8,7 @@ Before using the code, ensure the following requirements are met:
 
 - Python 3.x installed.
 - SeaBreeze library installed (`pip install seabreeze`).
-- `pyseabreeze` installed (`pip install pyseabreeze`).
+- `pyseabreeze` installed (`pip install pyseabreeze`). (if this command doesn't work try 'pip install seabreeze[pyseabreeze]')
 - Matplotlib library installed (`pip install matplotlib`).
 
 ## Code Overview
