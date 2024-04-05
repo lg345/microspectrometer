@@ -32,54 +32,53 @@ class Microspectrometer:
         self.integration_time = 1.0E5
         self.collected_spectra = []
     
-    def connect(self):
-    """
-    Connects to the first available UV-Vis spectrometer. Make sure this is ran AFTER it is plugged in (power+usb)
-    ----------    
-    """
+    def connect(self):   
+        """
+        Connects to the first available UV-Vis spectrometer. Make sure this is ran AFTER it is plugged in (power+usb)
+        """
         self.spectrometer = Spectrometer.from_first_available()
         self.wavelengths = self.spectrometer.wavelengths()
         self.spectrometer.features['spectrometer'][0].set_integration_time_micros(self.integration_time)
         
     def disconnect(self):
-    """
-    Disconnects the current spectrometer instance from the physical device. 
-    Usually only need this if the spectrometer was powered off or disconnected physically.
-    ----------
-    """
+        """
+        Disconnects the current spectrometer instance from the physical device. 
+        Usually only need this if the spectrometer was powered off or disconnected physically.
+        ----------
+        """
         self.spectrometer.close()
         
     def change_integration_time(self, integration_time):
-    """
-    Sets the integration time of the device in microseconds.
-    Parameters
-    ----------
-    integration_time : float
-        The desired integration time in microseconds. Default is 1E5.
-    ----------
-    """
+        """
+        Sets the integration time of the device in microseconds.
+        Parameters
+        ----------
+        integration_time : float
+            The desired integration time in microseconds. Default is 1E5.
+        ----------
+        """
         self.integration_time=integration_time
         self.spectrometer.features['spectrometer'][0].set_integration_time_micros(self.integration_time)
         #self.spectrometer.set_integration_time_micros(self.integration_time)#The default is 10k microseconds, 100ms.
 
     def measure(self, spectrum_type = 'current_spectrum', number_of_scans = 10, save = True, filename = None, comments='', store = True):
-    """
-    Measures the current spectrum for the attached spectrometer.
-    Parameters
-    ----------
-    spectrum_type : string
-        Identify what type of spectrum it is. Options: current_spectrum, reference, or dark.
-        Using reference or dark will override the current ref or dark spectrum when measuring new spectra.
-    number_of_scans : int
-        Number of scans to use for the measurement.
-    save : boolean
-        If the file scan should be saved. The transmission spectrum.
-    filename : string
-        Name of the file if it is saved. It defaults to a datetime stamp for the filename.
-    comments : string
-        Comment for the scan.
-    ----------
-    """
+        """
+        Measures the current spectrum for the attached spectrometer.
+        Parameters
+        ----------
+        spectrum_type : string
+            Identify what type of spectrum it is. Options: current_spectrum, reference, or dark.
+            Using reference or dark will override the current ref or dark spectrum when measuring new spectra.
+        number_of_scans : int
+            Number of scans to use for the measurement.
+        save : boolean
+            If the file scan should be saved. The transmission spectrum.
+        filename : string
+            Name of the file if it is saved. It defaults to a datetime stamp for the filename.
+        comments : string
+            Comment for the scan.
+        ----------
+        """
         if spectrum_type not in ['current_spectrum','reference','dark']:
             raise Exception('Invalid spectrum_type.', 'Scans must be current_spectrum, reference, or dark.')     
         if spectrum_type == 'dark':
@@ -98,21 +97,21 @@ class Microspectrometer:
             self.save_transmission(spectrum_type, filename,comments)
             
     def datetime_stamp(self):
-    """
-    Updates the objects datetime stamp for the current datetime.
-    ----------
-    """
+        """
+        Updates the objects datetime stamp for the current datetime.
+        ----------
+        """
         today=datetime.now()
         self.last_run_datetime=today.strftime('%m/%d/%Y %H:%M:%S')
         
     def start_new_experiment(self, directory=None):
-    """
-    Creates a new directory and chdir into that directory. Does not overwrite a previous directory.
-    ----------
-    directory : string
-        The name of the directory. The default is a datestamped directory.
-    ----------
-    """
+        """
+        Creates a new directory and chdir into that directory. Does not overwrite a previous directory.
+        ----------
+        directory : string
+            The name of the directory. The default is a datestamped directory.
+        ----------
+        """
         today = date.today()
         if directory == None:
             d1 = today.strftime('%m%d%Y')
@@ -123,13 +122,13 @@ class Microspectrometer:
         os.chdir(d1)
     
     def plot_absorbance(self,save = False):
-    """
-    Plots the log10 absorbance of the current spectrum (last measured).
-    ----------
-    save : boolean
-        Saves a .png of the absorbance. Not yet implemented.
-    ----------
-    """
+        """
+        Plots the log10 absorbance of the current spectrum (last measured).
+        ----------
+        save : boolean
+            Saves a .png of the absorbance. Not yet implemented.
+        ----------
+        """
         y = np.log10(self.reference/self.current_spectrum)
         x = self.wavelengths
         plt.figure(dpi=100)
@@ -137,17 +136,17 @@ class Microspectrometer:
         return plt.gcf()
              
     def save_transmission(self, spectrum_type, filename = None,comments=''):
-    """
-    Saves the transmission spectrum.
-    ----------
-    spectrum_type : string
-        This defines which type of spectrum to save: current_spectrum, dark, or reference. 
-    filename : string
-        Name of the saved file. Defaults to datettime stamp.
-    comments : string
-        Comments to be included in the file. 
-    ----------
-    """
+        """
+        Saves the transmission spectrum.
+        ----------
+        spectrum_type : string
+            This defines which type of spectrum to save: current_spectrum, dark, or reference. 
+        filename : string
+            Name of the saved file. Defaults to datettime stamp.
+        comments : string
+            Comments to be included in the file. 
+        ----------
+        """
         y = getattr(self,spectrum_type)
         if filename == None:
             today=datetime.now()
@@ -156,15 +155,15 @@ class Microspectrometer:
         np.savetxt(filename,np.transpose(np.vstack([self.wavelengths,y])),header=comments)
         
     def save_absorbance(self, filename=None,comments=''):
-    """
-    Saves the current absorbance spectrum.
-    ---------- 
-    filename : string
-        Name of the saved file. Defaults to datettime stamp.
-    comments : string
-        Comments to be included in the file. 
-    ----------
-    """
+        """
+        Saves the current absorbance spectrum.
+        ---------- 
+        filename : string
+            Name of the saved file. Defaults to datettime stamp.
+        comments : string
+            Comments to be included in the file. 
+        ----------
+        """
         if filename == None:
             today=datetime.now()
             timestamp=today.strftime('%m_%d_%Y_%H_%M_%S')
@@ -172,65 +171,65 @@ class Microspectrometer:
         np.savetxt(filename,np.transpose(np.vstack([self.wavelengths,np.log10(self.reference/self.current_spectrum)])),header=comments)
         
     def load_spectrum(self, spectrum_type,filename):
-    """
-    Loads in ascii .xy spectra. Specifically to overwrite dark or reference with a previously measure spectrum.
-    ---------- 
-    spectrum_type : string
-        Type of spectrum that the loaded file is. Options are dark and reference - could also do 
-        current_spectrum but not sure why anyone would.
-    filename : string
-        Name of the file containing the data.
-    ----------
-    """
+        """
+        Loads in ascii .xy spectra. Specifically to overwrite dark or reference with a previously measure spectrum.
+        ---------- 
+        spectrum_type : string
+            Type of spectrum that the loaded file is. Options are dark and reference - could also do 
+            current_spectrum but not sure why anyone would.
+        filename : string
+            Name of the file containing the data.
+        ----------
+        """
         y=np.loadtxt(filename)[:,1]
         setattr(self,spectrum_type,y)
     
     def save_all_spectra(self):
-    """
-    This is a backup method to dump all of the spectra out of memory in case they weren't being saved.
-    ----------
+        """
+        This is a backup method to dump all of the spectra out of memory in case they weren't being saved.
+        ----------
         """
         for i in self.collected_spectra:
             i.save_spectrum()
     
     def describe_all_spectra(self):
-    """
-    Print out information of all the spectra currently stored in memory.
-    ----------
-    """
+        """
+        Print out information of all the spectra currently stored in memory.
+        ----------
+        """
         print('Scan\tDateTime\tSpectrumType\tComment')
         for i in self.collected_spectra:
             print('%d\t%s\t%s\t%s' % (i.scan_number,i.measurement_time_stamp,i.spectrum_type,i.comments))
     
     def set_spectrum(self, spectrum_type,index):
-    """
-    Sets a spectrum in memory to a dark or reference. E.g. you want to replace the reference spectrum
-    with an old scan that hasn't yet been saved. Or go back to an old dark/ref
-    ----------
-    spectrum_type : string
-        Type of spectrum to replace: dark or reference
-    index : integer
-        The index of the scan: 'scan_number' that will replace either the dark or the reference.
-    ----------
+        """
+        Sets a spectrum in memory to a dark or reference. E.g. you want to replace the reference spectrum
+        with an old scan that hasn't yet been saved. Or go back to an old dark/ref
+        ----------
+        spectrum_type : string
+            Type of spectrum to replace: dark or reference
+        index : integer
+            The index of the scan: 'scan_number' that will replace either the dark or the reference.
+        ----------
 
-    """
+        """
         running_y=self.collected_spectra[index].counts
         setattr(self,spectrum_type,running_y)
         
     def continuous_measurements(self, update_time = 0.5, ref_spec_index=None):
-    """
-    Continuously measures and displays the absorbance spectrum to monitor over time. 
-    To exit stop the kernel (don't restart it).
-    ----------
-    update_time : float
-        Time in seconds to update the plot. 
-    ref_spec_index : integer
-        The index of the scan to use as a reference to compare to. 
-        Not in the same sense as a reference spectrum for absorbance
-        but a scan you also want plotted for comparison. 
-    ----------
+        """
+        Continuously measures and displays the absorbance spectrum to monitor over time. 
+        To exit stop the kernel (don't restart it).
+        ----------
+        update_time : float
+            Time in seconds to update the plot. 
+        ref_spec_index : integer
+            The index of the scan to use as a reference to compare to. 
+            Not in the same sense as a reference spectrum for absorbance
+            but a scan you also want plotted for comparison. 
+        ----------
 
-    """
+        """
         fig = plt.figure(dpi=100)
         ax = fig.add_subplot(111)
         plt.ion()
@@ -259,19 +258,19 @@ class Microspectrometer:
                 plt.close()
                 break
     def continuous_transmission(self, update_time = 0.5, ref_spec_index=None):
-    """
-    Continuously measures and displays the transmission spectrum to monitor over time. 
-    To exit stop the kernel (don't restart it). TODO: merge with above.
-    ----------
-    update_time : float
-        Time in seconds to update the plot. 
-    ref_spec_index : integer
-        The index of the scan to use as a reference to compare to. 
-        Not in the same sense as a reference spectrum for absorbance
-        but a scan you also want plotted for comparison. 
-    ----------
+        """
+        Continuously measures and displays the transmission spectrum to monitor over time. 
+        To exit stop the kernel (don't restart it). TODO: merge with above.
+        ----------
+        update_time : float
+            Time in seconds to update the plot. 
+        ref_spec_index : integer
+            The index of the scan to use as a reference to compare to. 
+            Not in the same sense as a reference spectrum for absorbance
+            but a scan you also want plotted for comparison. 
+        ----------
 
-    """
+        """
         fig = plt.figure(dpi=100)
         ax = fig.add_subplot(111)
         plt.ion()
