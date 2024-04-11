@@ -1,13 +1,14 @@
 import seabreeze
 import os
 from datetime import date,datetime
+seabreeze.use('pyseabreeze')
 from seabreeze.spectrometers import list_devices, Spectrometer
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython import display
 import time
 # explicitly request pyseabreeze
-seabreeze.use('pyseabreeze')
+
 class Spectrum:
     def __init__(self,scan_number,integration_time,measurement_time_stamp,wavelengths,counts,spectrum_type,comments):
         self.scan_number=scan_number
@@ -36,7 +37,7 @@ class Microspectrometer:
         """
         Connects to the first available UV-Vis spectrometer. Make sure this is ran AFTER it is plugged in (power+usb)
         """
-        self.spectrometer = Spectrometer.from_first_available()
+        self.spectrometer = Spectrometer.from_first_available(emulate=emulate)
         self.wavelengths = self.spectrometer.wavelengths()
         self.spectrometer.features['spectrometer'][0].set_integration_time_micros(self.integration_time)
         
@@ -216,7 +217,7 @@ class Microspectrometer:
         running_y=self.collected_spectra[index].counts
         setattr(self,spectrum_type,running_y)
         
-    def continuous_measurements(self, update_time = 0.5, ref_spec_index=None):
+    def continuous_measurements(self, update_time = 0.5, ref_spec_index=None, save = False):
         """
         Continuously measures and displays the absorbance spectrum to monitor over time. 
         To exit stop the kernel (don't restart it).
@@ -257,7 +258,7 @@ class Microspectrometer:
             except KeyboardInterrupt:
                 plt.close()
                 break
-    def continuous_transmission(self, update_time = 0.5, ref_spec_index=None):
+    def continuous_transmission(self, update_time = 0.5, ref_spec_index=None,save = False):
         """
         Continuously measures and displays the transmission spectrum to monitor over time. 
         To exit stop the kernel (don't restart it). TODO: merge with above.
@@ -286,7 +287,7 @@ class Microspectrometer:
         plt.legend(['Current Spectrum','Starting Spectrum'])
         while 1==1:
             try:
-                self.measure(store = False, save = False)
+                self.measure(store = False, save = save)
                 line1.set_ydata(self.current_spectrum)#This will plot the absorption spectrum which is the log of you reference divided by the sample.)
                 plt.gcf().canvas.draw()
                 display.clear_output(wait=True)

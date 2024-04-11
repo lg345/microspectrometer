@@ -73,6 +73,7 @@ The `Microspectrometer` class manages the UV-Vis spectrometer and provides vario
 ## Example Code
 ```python
 ### Example Usage with New Experiment
+from Microspectrometer import Microspectrometer
 spectrometer = Microspectrometer()
 
 ### Connect to the spectrometer
