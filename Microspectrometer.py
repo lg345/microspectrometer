@@ -252,8 +252,8 @@ class Microspectrometer:
                 display.clear_output(wait=True)
                 display.display(plt.gcf())
                 ax.relim()
-                #ax.autoscale_view()
-                plt.ylim([0,4])
+                ax.autoscale_view()
+                #plt.ylim([0,4])
                 time.sleep(update_time)
             except KeyboardInterrupt:
                 plt.close()
@@ -293,8 +293,8 @@ class Microspectrometer:
                 display.clear_output(wait=True)
                 display.display(plt.gcf())
                 ax.relim()
-                #ax.autoscale_view()
-                plt.ylim([0,4])
+                ax.autoscale_view()
+                #plt.ylim([0,4])
                 time.sleep(update_time)
             except KeyboardInterrupt:
                 plt.close()
