@@ -37,7 +37,7 @@ class Microspectrometer:
         """
         Connects to the first available UV-Vis spectrometer. Make sure this is ran AFTER it is plugged in (power+usb)
         """
-        self.spectrometer = Spectrometer.from_first_available(emulate=emulate)
+        self.spectrometer = Spectrometer.from_first_available()
         self.wavelengths = self.spectrometer.wavelengths()
         self.spectrometer.features['spectrometer'][0].set_integration_time_micros(self.integration_time)
         
