@@ -10,6 +10,7 @@ Before using the code, ensure the following requirements are met:
 - SeaBreeze library installed (`pip install seabreeze`).
 - `pyseabreeze` installed (`pip install pyseabreeze`). (if this command doesn't work try `pip install seabreeze[pyseabreeze]`)
 - Matplotlib library installed (`pip install matplotlib`).
+- pip install libusb
 
 ## Code Overview
 
