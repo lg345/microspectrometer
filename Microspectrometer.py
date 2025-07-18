@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
 import seabreeze
-seabreeze.use('pyseabreeze')
+
 from seabreeze.spectrometers import Spectrometer
+seabreeze.use('cseabreeze')
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython import display
